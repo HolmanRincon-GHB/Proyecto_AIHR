@@ -1,0 +1,181 @@
+fecha,region,producto,unidades,valor_unitario_cop,valor_total_cop
+2024-03-23,Medellin,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-01-13,Bogota,Monitor Dell 27 UltraSharp,2,1450000,2900000
+2024-04-03,Bucaramanga,Dell Latitude 5540,9,4850000,43650000
+2024-02-24,Bogota,Dell Latitude 5540,7,4850000,33950000
+2024-04-17,Bogota,HP EliteBook 840 G10,2,3920000,7840000
+2024-05-21,Barranquilla,Dell Latitude 5540,10,4850000,48500000
+2024-02-01,Medellin,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-05-27,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,1,780000,780000
+2024-02-26,Bogota,Monitor Dell 27 UltraSharp,3,1450000,4350000
+2024-03-15,Barranquilla,HP EliteBook 840 G10,9,3920000,35280000
+2024-01-31,Bucaramanga,Switch Cisco Catalyst 1300-24T,9,1850000,16650000
+2024-06-23,Medellin,Dell Latitude 5540,10,4850000,48500000
+2024-05-26,Medellin,Switch Cisco Catalyst 1300-24T,2,1850000,3700000
+2024-05-20,Bogota,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-06-07,Medellin,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-05-16,Barranquilla,Switch Cisco Catalyst 1300-24T,8,1850000,14800000
+2024-05-29,Barranquilla,Switch Cisco Catalyst 1300-24T,5,1850000,9250000
+2024-03-04,Medellin,HP EliteBook 840 G10,2,3920000,7840000
+2024-05-27,Cali,Monitor Dell 27 UltraSharp,8,1450000,11600000
+2024-03-28,Barranquilla,Switch Cisco Catalyst 1300-24T,10,1850000,18500000
+2024-01-19,Bogota,Monitor Dell 27 UltraSharp,7,1450000,10150000
+2024-02-12,Cali,HP EliteBook 840 G10,8,3920000,31360000
+2024-04-17,Bogota,Dell Latitude 5540,9,4850000,43650000
+2024-05-26,Cali,Switch Cisco Catalyst 1300-24T,12,1850000,22200000
+2024-03-30,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,10,780000,7800000
+2024-04-26,Bogota,Dell Latitude 5540,5,4850000,24250000
+2024-05-01,Bogota,Dell Latitude 5540,12,4850000,58200000
+2024-06-28,Cali,Monitor Dell 27 UltraSharp,11,1450000,15950000
+2024-04-24,Cali,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-03-29,Bogota,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-02-13,Bucaramanga,Dell Latitude 5540,8,4850000,38800000
+2024-01-16,Medellin,Switch Cisco Catalyst 1300-24T,3,1850000,5550000
+2024-03-04,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,8,780000,6240000
+2024-01-21,Medellin,Access Point Ubiquiti UniFi U6 Pro,7,780000,5460000
+2024-05-20,Cali,HP EliteBook 840 G10,7,3920000,27440000
+2024-05-20,Cali,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-06-23,Barranquilla,HP EliteBook 840 G10,3,3920000,11760000
+2024-01-22,Medellin,HP EliteBook 840 G10,4,3920000,15680000
+2024-06-17,Medellin,Dell Latitude 5540,8,4850000,38800000
+2024-05-30,Medellin,Switch Cisco Catalyst 1300-24T,5,1850000,9250000
+2024-01-02,Medellin,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-04-04,Bucaramanga,Monitor Dell 27 UltraSharp,6,1450000,8700000
+2024-02-02,Bucaramanga,Monitor Dell 27 UltraSharp,11,1450000,15950000
+2024-06-22,Bogota,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-05-23,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,7,780000,5460000
+2024-04-10,Bogota,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-04-12,Bogota,HP EliteBook 840 G10,2,3920000,7840000
+2024-02-23,Barranquilla,HP EliteBook 840 G10,2,3920000,7840000
+2024-03-28,Bucaramanga,Dell Latitude 5540,2,4850000,9700000
+2024-01-01,Bucaramanga,HP EliteBook 840 G10,9,3920000,35280000
+2024-01-26,Cali,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-01-19,Medellin,Monitor Dell 27 UltraSharp,7,1450000,10150000
+2024-02-08,Cali,Switch Cisco Catalyst 1300-24T,10,1850000,18500000
+2024-04-03,Barranquilla,Dell Latitude 5540,2,4850000,9700000
+2024-05-04,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,8,780000,6240000
+2024-03-20,Bogota,HP EliteBook 840 G10,2,3920000,7840000
+2024-03-28,Cali,Access Point Ubiquiti UniFi U6 Pro,12,780000,9360000
+2024-02-11,Bucaramanga,Dell Latitude 5540,4,4850000,19400000
+2024-05-15,Cali,HP EliteBook 840 G10,12,3920000,47040000
+2024-05-19,Bogota,Monitor Dell 27 UltraSharp,5,1450000,7250000
+2024-06-13,Bogota,Switch Cisco Catalyst 1300-24T,9,1850000,16650000
+2024-04-03,Medellin,Switch Cisco Catalyst 1300-24T,4,1850000,7400000
+2024-05-16,Bucaramanga,Monitor Dell 27 UltraSharp,6,1450000,8700000
+2024-06-11,Medellin,Monitor Dell 27 UltraSharp,4,1450000,5800000
+2024-03-02,Barranquilla,HP EliteBook 840 G10,4,3920000,15680000
+2024-05-12,Barranquilla,Switch Cisco Catalyst 1300-24T,12,1850000,22200000
+2024-01-08,Bogota,Switch Cisco Catalyst 1300-24T,8,1850000,14800000
+2024-03-07,Medellin,Monitor Dell 27 UltraSharp,6,1450000,8700000
+2024-04-24,Cali,Switch Cisco Catalyst 1300-24T,2,1850000,3700000
+2024-02-26,Bogota,HP EliteBook 840 G10,8,3920000,31360000
+2024-02-20,Cali,HP EliteBook 840 G10,8,3920000,31360000
+2024-06-08,Bucaramanga,Dell Latitude 5540,8,4850000,38800000
+2024-06-16,Cali,Dell Latitude 5540,11,4850000,53350000
+2024-01-31,Barranquilla,HP EliteBook 840 G10,8,3920000,31360000
+2024-02-15,Barranquilla,Switch Cisco Catalyst 1300-24T,2,1850000,3700000
+2024-04-11,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,12,780000,9360000
+2024-01-22,Medellin,HP EliteBook 840 G10,3,3920000,11760000
+2024-01-08,Medellin,Monitor Dell 27 UltraSharp,8,1450000,11600000
+2024-06-16,Medellin,Monitor Dell 27 UltraSharp,10,1450000,14500000
+2024-05-01,Cali,HP EliteBook 840 G10,9,3920000,35280000
+2024-05-20,Medellin,Dell Latitude 5540,1,4850000,4850000
+2024-06-15,Bogota,Monitor Dell 27 UltraSharp,12,1450000,17400000
+2024-02-05,Barranquilla,HP EliteBook 840 G10,4,3920000,15680000
+2024-01-08,Cali,HP EliteBook 840 G10,5,3920000,19600000
+2024-05-08,Medellin,Monitor Dell 27 UltraSharp,6,1450000,8700000
+2024-03-07,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,3,780000,2340000
+2024-01-16,Cali,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-05-29,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-02-03,Bucaramanga,HP EliteBook 840 G10,9,3920000,35280000
+2024-05-10,Bogota,Access Point Ubiquiti UniFi U6 Pro,3,780000,2340000
+2024-06-04,Bogota,HP EliteBook 840 G10,3,3920000,11760000
+2024-02-06,Barranquilla,Monitor Dell 27 UltraSharp,12,1450000,17400000
+2024-01-31,Bucaramanga,Dell Latitude 5540,6,4850000,29100000
+2024-06-23,Bucaramanga,Monitor Dell 27 UltraSharp,9,1450000,13050000
+2024-05-03,Bogota,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-03-04,Medellin,Switch Cisco Catalyst 1300-24T,1,1850000,1850000
+2024-01-26,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-01-08,Bogota,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-06-05,Bucaramanga,Monitor Dell 27 UltraSharp,9,1450000,13050000
+2024-02-21,Cali,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-05-16,Barranquilla,Monitor Dell 27 UltraSharp,4,1450000,5800000
+2024-06-27,Bucaramanga,Switch Cisco Catalyst 1300-24T,9,1850000,16650000
+2024-02-21,Barranquilla,HP EliteBook 840 G10,7,3920000,27440000
+2024-02-01,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-01-19,Medellin,Access Point Ubiquiti UniFi U6 Pro,2,780000,1560000
+2024-02-24,Cali,Dell Latitude 5540,3,4850000,14550000
+2024-06-13,Cali,HP EliteBook 840 G10,5,3920000,19600000
+2024-02-05,Barranquilla,HP EliteBook 840 G10,12,3920000,47040000
+2024-01-25,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,3,780000,2340000
+2024-06-19,Medellin,HP EliteBook 840 G10,12,3920000,47040000
+2024-04-20,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-04-17,Medellin,Switch Cisco Catalyst 1300-24T,6,1850000,11100000
+2024-01-24,Cali,Dell Latitude 5540,6,4850000,29100000
+2024-05-21,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,12,780000,9360000
+2024-01-05,Barranquilla,Switch Cisco Catalyst 1300-24T,9,1850000,16650000
+2024-06-08,Cali,Monitor Dell 27 UltraSharp,2,1450000,2900000
+2024-01-29,Medellin,Dell Latitude 5540,2,4850000,9700000
+2024-03-08,Cali,Dell Latitude 5540,3,4850000,14550000
+2024-03-10,Medellin,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-03-07,Barranquilla,HP EliteBook 840 G10,9,3920000,35280000
+2024-05-11,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,12,780000,9360000
+2024-03-24,Bogota,Switch Cisco Catalyst 1300-24T,1,1850000,1850000
+2024-06-25,Medellin,Access Point Ubiquiti UniFi U6 Pro,2,780000,1560000
+2024-03-09,Bogota,Dell Latitude 5540,5,4850000,24250000
+2024-01-22,Bucaramanga,HP EliteBook 840 G10,2,3920000,7840000
+2024-03-08,Bogota,Access Point Ubiquiti UniFi U6 Pro,1,780000,780000
+2024-03-27,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,5,780000,3900000
+2024-06-08,Medellin,Dell Latitude 5540,9,4850000,43650000
+2024-03-02,Bogota,HP EliteBook 840 G10,5,3920000,19600000
+2024-01-13,Medellin,HP EliteBook 840 G10,5,3920000,19600000
+2024-06-09,Cali,Monitor Dell 27 UltraSharp,4,1450000,5800000
+2024-03-15,Barranquilla,Monitor Dell 27 UltraSharp,11,1450000,15950000
+2024-02-15,Cali,Switch Cisco Catalyst 1300-24T,1,1850000,1850000
+2024-03-05,Bogota,Dell Latitude 5540,1,4850000,4850000
+2024-05-09,Bucaramanga,HP EliteBook 840 G10,9,3920000,35280000
+2024-05-01,Medellin,Access Point Ubiquiti UniFi U6 Pro,2,780000,1560000
+2024-06-17,Barranquilla,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-04-10,Bucaramanga,Switch Cisco Catalyst 1300-24T,12,1850000,22200000
+2024-02-25,Medellin,Switch Cisco Catalyst 1300-24T,4,1850000,7400000
+2024-06-11,Medellin,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-01-14,Medellin,Dell Latitude 5540,2,4850000,9700000
+2024-06-09,Cali,Access Point Ubiquiti UniFi U6 Pro,3,780000,2340000
+2024-01-15,Bogota,Access Point Ubiquiti UniFi U6 Pro,9,780000,7020000
+2024-06-20,Cali,Monitor Dell 27 UltraSharp,4,1450000,5800000
+2024-06-26,Cali,Dell Latitude 5540,8,4850000,38800000
+2024-02-17,Medellin,Switch Cisco Catalyst 1300-24T,8,1850000,14800000
+2024-01-01,Cali,Switch Cisco Catalyst 1300-24T,6,1850000,11100000
+2024-05-20,Cali,HP EliteBook 840 G10,1,3920000,3920000
+2024-03-20,Medellin,Switch Cisco Catalyst 1300-24T,3,1850000,5550000
+2024-01-01,Cali,Access Point Ubiquiti UniFi U6 Pro,2,780000,1560000
+2024-05-01,Cali,Monitor Dell 27 UltraSharp,11,1450000,15950000
+2024-02-21,Medellin,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-01-24,Cali,Dell Latitude 5540,3,4850000,14550000
+2024-04-12,Bucaramanga,Dell Latitude 5540,7,4850000,33950000
+2024-01-06,Cali,Switch Cisco Catalyst 1300-24T,11,1850000,20350000
+2024-02-29,Bogota,Monitor Dell 27 UltraSharp,9,1450000,13050000
+2024-02-09,Bucaramanga,Access Point Ubiquiti UniFi U6 Pro,6,780000,4680000
+2024-05-06,Medellin,Switch Cisco Catalyst 1300-24T,12,1850000,22200000
+2024-06-07,Medellin,Dell Latitude 5540,12,4850000,58200000
+2024-05-11,Barranquilla,Monitor Dell 27 UltraSharp,3,1450000,4350000
+2024-05-14,Bucaramanga,Monitor Dell 27 UltraSharp,1,1450000,1450000
+2024-06-24,Bucaramanga,HP EliteBook 840 G10,2,3920000,7840000
+2024-01-08,Bogota,HP EliteBook 840 G10,11,3920000,43120000
+2024-04-02,Bogota,Access Point Ubiquiti UniFi U6 Pro,8,780000,6240000
+2024-05-22,Bogota,Dell Latitude 5540,11,4850000,53350000
+2024-05-16,Medellin,Access Point Ubiquiti UniFi U6 Pro,5,780000,3900000
+2024-01-01,Barranquilla,Dell Latitude 5540,12,4850000,58200000
+2024-05-08,Bucaramanga,Dell Latitude 5540,11,4850000,53350000
+2024-05-14,Bogota,Access Point Ubiquiti UniFi U6 Pro,5,780000,3900000
+2024-01-20,Cali,HP EliteBook 840 G10,12,3920000,47040000
+2024-02-22,Medellin,Access Point Ubiquiti UniFi U6 Pro,8,780000,6240000
+2024-04-07,Bogota,Access Point Ubiquiti UniFi U6 Pro,11,780000,8580000
+2024-03-14,Bogota,Monitor Dell 27 UltraSharp,11,1450000,15950000
+2024-06-13,Medellin,Dell Latitude 5540,10,4850000,48500000
+2024-02-07,Cali,Switch Cisco Catalyst 1300-24T,11,1850000,20350000
+2024-06-26,Cali,Monitor Dell 27 UltraSharp,10,1450000,14500000
+2024-02-04,Bogota,Access Point Ubiquiti UniFi U6 Pro,1,780000,780000
+2024-05-04,Cali,Dell Latitude 5540,12,4850000,58200000
+2024-02-25,Barranquilla,Switch Cisco Catalyst 1300-24T,12,1850000,22200000
+2024-05-12,Cali,Access Point Ubiquiti UniFi U6 Pro,8,780000,6240000
