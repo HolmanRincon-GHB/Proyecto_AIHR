@@ -44,7 +44,7 @@ async def consultar_rrhh(request: RRHHRequest):
         RRHHResponse con la respuesta del equipo multiagente y sus fuentes
     """
     try:
-        resultado = rrhh_service.responder(request.pregunta, session_id=request.session_id)
+        resultado = rrhh_service.responder(request.pregunta)
         return RRHHResponse(
             respuesta=resultado["respuesta"],
             pregunta=request.pregunta,
@@ -78,7 +78,7 @@ async def consultar_rrhh_stream(request: RRHHRequest):
     """
     def generar_eventos():
         try:
-            for evento in rrhh_service.responder_stream(request.pregunta, session_id=request.session_id):
+            for evento in rrhh_service.responder_stream(request.pregunta):
                 yield f"data: {json.dumps(evento, ensure_ascii=False)}\n\n"
         except Exception as e:
             error = {"tipo": "error", "mensaje": str(e)}
@@ -99,16 +99,3 @@ async def consultar_rrhh_stream(request: RRHHRequest):
 async def listar_documentos():
     """GET /rrhh/documentos — inventario de fuentes disponibles"""
     return {"documentos": rrhh_service.documentos_disponibles}
-
-
-@router.delete(
-    "/rrhh/{session_id}",
-    summary="Limpiar memoria de una sesión",
-    description="Olvida el historial de conversación de una sesión del multiagente de RRHH.",
-)
-async def limpiar_sesion_rrhh(session_id: str):
-    """DELETE /rrhh/{session_id} — limpia la memoria de esa sesión"""
-    eliminado = rrhh_service.limpiar_sesion(session_id)
-    if eliminado:
-        return {"mensaje": f"Memoria de la sesión '{session_id}' eliminada correctamente"}
-    return {"mensaje": f"Sesión '{session_id}' no encontrada"}

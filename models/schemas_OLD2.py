@@ -58,7 +58,7 @@ class AgentRequest(BaseModel):
 class RRHHRequest(BaseModel):
     """Cuerpo del POST /rrhh — consulta al multiagente de RRHH"""
     pregunta:   str = Field(..., description="Pregunta sobre RRHH y retención de talento", min_length=1, max_length=2000)
-    session_id: str = Field(default="default", description="ID de sesión para memoria conversacional (últimos intercambios)")
+    session_id: str = Field(default="default", description="ID informativo de sesión (no gestiona memoria por ahora)")
 
     class Config:
         json_schema_extra = {

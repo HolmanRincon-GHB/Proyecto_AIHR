@@ -13,13 +13,11 @@ Flujo: Coordinador → Investigador (RAG/Chroma) → Analista → Redactor
 """
 
 import os
-from pathlib import Path
 from typing import TypedDict, Literal, Annotated
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langgraph.graph import StateGraph, START, END
@@ -199,52 +197,6 @@ DOCUMENTOS_RRHH = [
 
 
 # ═══════════════════════════════════════════════════════════
-#  DOCUMENTOS REALES (PDF) — se suman a los sintéticos de arriba
-#  ✏️ MODIFICA AQUÍ: agrega una entrada por cada PDF que quieras
-#  indexar. "archivo" es el nombre dentro de CARPETA_PDFS_RRHH,
-#  "titulo" es como aparecerá citado en "fuentes".
-# ═══════════════════════════════════════════════════════════
-CARPETA_PDFS_RRHH = os.getenv("CARPETA_PDFS_RRHH", "data/documentos")
-
-PDFS_RRHH = [
-    {"archivo": "02_informe_rrhh.pdf", "titulo": "Informe de RRHH"},
-]
-
-
-def cargar_pdfs_rrhh() -> list:
-    """
-    Carga cada PDF listado en PDFS_RRHH y lo convierte en un Document,
-    exactamente en el mismo formato que los documentos sintéticos, para
-    que se indexen juntos en el mismo vector store.
-    """
-    documentos = []
-    carpeta = Path(CARPETA_PDFS_RRHH)
-    if not carpeta.is_absolute():
-        # Raíz del proyecto = un nivel arriba de core/
-        carpeta = Path(__file__).resolve().parent.parent / carpeta
-
-    for entrada in PDFS_RRHH:
-        ruta = carpeta / entrada["archivo"]
-        if not ruta.exists():
-            print(f"⚠️  PDF no encontrado, se omite: {ruta}")
-            continue
-
-        paginas = PyPDFLoader(str(ruta)).load()
-        texto_completo = "\n\n".join(p.page_content for p in paginas)
-        documentos.append(Document(
-            page_content=texto_completo,
-            metadata={
-                "titulo": entrada["titulo"],
-                "empresa": "TechnoDistrib S.A.S.",
-                "archivo": entrada["archivo"],
-            },
-        ))
-        print(f"📄 PDF cargado: {entrada['archivo']} → \"{entrada['titulo']}\" ({len(paginas)} páginas)")
-
-    return documentos
-
-
-# ═══════════════════════════════════════════════════════════
 #  STATE COMPARTIDO DEL GRAFO MULTIAGENTE
 # ═══════════════════════════════════════════════════════════
 class EstadoRRHH(TypedDict):
@@ -293,30 +245,9 @@ def crear_agente_investigador(retriever):
         return {
             "contexto_reunido": contexto,
             "fuentes": fuentes,
+            "mensajes": [AIMessage(content=f"[Investigador]: consultó {', '.join(fuentes)}")],
         }
     return agente_investigador
-
-
-# ═══════════════════════════════════════════════════════════
-#  MEMORIA — formatea el historial de conversación previo
-#  ✏️ MODIFICA AQUÍ: cuántos mensajes previos recordar por sesión
-# ═══════════════════════════════════════════════════════════
-MEMORIA_MAX_MENSAJES = 8  # ~4 intercambios pregunta/respuesta
-
-
-def formatear_historial(mensajes: list) -> str:
-    """Convierte los mensajes previos (sin incluir la pregunta actual) a texto plano."""
-    previos = mensajes[:-1][-MEMORIA_MAX_MENSAJES:]
-    if not previos:
-        return "(sin conversación previa)"
-
-    lineas = []
-    for m in previos:
-        if isinstance(m, HumanMessage):
-            lineas.append(f"Usuario: {m.content}")
-        elif isinstance(m, AIMessage):
-            lineas.append(f"Asistente: {m.content}")
-    return "\n".join(lineas) if lineas else "(sin conversación previa)"
 
 
 def agente_analista(estado: EstadoRRHH) -> dict:
@@ -335,10 +266,6 @@ Responde en español con estructura clara."""
         SystemMessage(content=system),
         HumanMessage(content=f"""Pregunta del usuario: {estado['tarea_original']}
 
-Conversación previa (úsala solo si la pregunta actual hace referencia a ella,
-por ejemplo "y en esa área..." o "cuál fue mi pregunta anterior"):
-{formatear_historial(estado.get('mensajes', []))}
-
 Documentos internos recuperados:
 {estado['contexto_reunido']}
 
@@ -348,6 +275,7 @@ la pregunta."""),
 
     return {
         "analisis": respuesta.content,
+        "mensajes": [AIMessage(content=f"[Analista]: {respuesta.content[:200]}...")],
     }
 
 
@@ -367,9 +295,6 @@ Responde en español."""
         SystemMessage(content=system),
         HumanMessage(content=f"""Pregunta del usuario: {estado['tarea_original']}
 
-Conversación previa (úsala solo si la pregunta actual hace referencia a ella):
-{formatear_historial(estado.get('mensajes', []))}
-
 Análisis del equipo de RRHH:
 {estado['analisis']}
 
@@ -380,6 +305,7 @@ Redacta la respuesta final para el usuario, citando las fuentes al final."""),
 
     return {
         "respuesta_final": respuesta.content,
+        "mensajes": [AIMessage(content=respuesta.content)],
     }
 
 
@@ -402,9 +328,7 @@ def _construir_retriever():
             metadata={"titulo": doc["titulo"], "empresa": "TechnoDistrib S.A.S."},
         )
         for doc in DOCUMENTOS_RRHH
-    ] + cargar_pdfs_rrhh()
-
-    titulos = [doc.metadata["titulo"] for doc in documentos]
+    ]
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=int(os.getenv("TAMANO_FRAGMENTO", "800")),
@@ -421,7 +345,7 @@ def _construir_retriever():
     vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
     k = int(os.getenv("K_FRAGMENTOS", "4"))
     retriever = vector_store.as_retriever(search_type="similarity", search_kwargs={"k": k})
-    return retriever, len(chunks), titulos
+    return retriever, len(chunks)
 
 
 def _construir_grafo_rrhh(retriever):
@@ -457,15 +381,13 @@ def _construir_grafo_rrhh(retriever):
 class RRHHService:
     def __init__(self):
         print("🔧 RRHHService: construyendo base de conocimiento (RAG)...")
-        self._retriever, self._total_chunks, self._titulos_documentos = _construir_retriever()
+        self._retriever, self._total_chunks = _construir_retriever()
         self._grafo = _construir_grafo_rrhh(self._retriever)
-        self._historiales: dict[str, list] = {}  # session_id -> mensajes previos
-        print(f"✅ RRHHService listo — {len(self._titulos_documentos)} documentos, {self._total_chunks} fragmentos")
+        print(f"✅ RRHHService listo — {len(DOCUMENTOS_RRHH)} documentos, {self._total_chunks} fragmentos")
 
-    def _estado_inicial(self, pregunta: str, session_id: str) -> dict:
-        historial_previo = self._historiales.get(session_id, [])
+    def _estado_inicial(self, pregunta: str) -> dict:
         return {
-            "mensajes":         historial_previo + [HumanMessage(content=pregunta)],
+            "mensajes":         [],
             "tarea_original":   pregunta,
             "siguiente_agente": "",
             "contexto_reunido": "",
@@ -473,16 +395,6 @@ class RRHHService:
             "analisis":         "",
             "respuesta_final":  "",
         }
-
-    def _guardar_intercambio(self, session_id: str, mensajes: list, respuesta: str) -> None:
-        actualizado = mensajes + [AIMessage(content=respuesta)]
-        self._historiales[session_id] = actualizado[-MEMORIA_MAX_MENSAJES:]
-
-    def limpiar_sesion(self, session_id: str) -> bool:
-        if session_id in self._historiales:
-            del self._historiales[session_id]
-            return True
-        return False
 
     def _lineas_para_nodo(self, nodo: str, estado: dict) -> list:
         """Traduce cada paso del grafo a las mismas líneas que ya se ven en la CLI."""
@@ -492,7 +404,7 @@ class RRHHService:
         if nodo == "investigador":
             return [
                 "🔍 [INVESTIGADOR] Recopilando información...",
-                f"📚 RAG listo: {len(self._titulos_documentos)} documento(s), {self._total_chunks} fragmentos",
+                f"📚 RAG listo: {len(DOCUMENTOS_RRHH)} documento(s), {self._total_chunks} fragmentos",
             ]
         if nodo == "analista":
             return ["📊 [ANALISTA] Analizando información..."]
@@ -500,28 +412,25 @@ class RRHHService:
             return ["✍️  [REDACTOR] Redactando respuesta final..."]
         return [f"[{nodo}]"]
 
-    def responder(self, pregunta: str, session_id: str = "default") -> dict:
+    def responder(self, pregunta: str) -> dict:
         """Ejecuta el grafo multiagente completo para una pregunta de RRHH (sin progreso)."""
-        estado_inicial = self._estado_inicial(pregunta, session_id)
         try:
-            resultado = self._grafo.invoke(estado_inicial)
+            resultado = self._grafo.invoke(self._estado_inicial(pregunta))
         except Exception as e:
             raise RuntimeError(f"Error en el multiagente RRHH: {e}")
-
-        self._guardar_intercambio(session_id, resultado["mensajes"], resultado["respuesta_final"])
 
         return {
             "respuesta": resultado["respuesta_final"],
             "fuentes":   resultado.get("fuentes", []),
         }
 
-    def responder_stream(self, pregunta: str, session_id: str = "default"):
+    def responder_stream(self, pregunta: str):
         """
         Generador que emite un evento por cada paso del grafo mientras corre,
         y termina con un evento 'final' con la respuesta completa. Pensado
         para transmitirse como Server-Sent Events desde el endpoint.
         """
-        estado_actual = self._estado_inicial(pregunta, session_id)
+        estado_actual = self._estado_inicial(pregunta)
 
         try:
             for actualizacion in self._grafo.stream(estado_actual, stream_mode="updates"):
@@ -533,8 +442,6 @@ class RRHHService:
             yield {"tipo": "error", "mensaje": f"Error en el multiagente RRHH: {e}"}
             return
 
-        self._guardar_intercambio(session_id, estado_actual["mensajes"], estado_actual.get("respuesta_final", ""))
-
         yield {
             "tipo": "final",
             "respuesta": estado_actual.get("respuesta_final", ""),
@@ -543,7 +450,7 @@ class RRHHService:
 
     @property
     def documentos_disponibles(self) -> list:
-        return self._titulos_documentos
+        return [doc["titulo"] for doc in DOCUMENTOS_RRHH]
 
 
 # Instancia global — se crea una sola vez al arrancar el servidor.

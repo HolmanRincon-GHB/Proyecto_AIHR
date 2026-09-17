@@ -41,6 +41,7 @@
 """
 
 import sys, os
+from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 
 from typing import TypedDict, Literal, Annotated
@@ -48,6 +49,7 @@ from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langgraph.graph import StateGraph, START, END
@@ -225,7 +227,53 @@ DOCUMENTOS_RRHH = [
 
 
 # ═══════════════════════════════════════════════════════════
+#  DOCUMENTOS REALES (PDF) — se suman a los sintéticos de arriba
+#  ✏️ MODIFICA AQUÍ: agrega una entrada por cada PDF que quieras
+#  indexar. "archivo" es el nombre dentro de CARPETA_PDFS_RRHH,
+#  "titulo" es como aparecerá citado en "fuentes".
+# ═══════════════════════════════════════════════════════════
+CARPETA_PDFS_RRHH = os.getenv("CARPETA_PDFS_RRHH", "data/documentos")
+
+PDFS_RRHH = [
+    {"archivo": "02_informe_rrhh.pdf", "titulo": "Informe de RRHH"},
+]
+
+
+def cargar_pdfs_rrhh() -> list[Document]:
+    """
+    Carga cada PDF listado en PDFS_RRHH y lo convierte en un Document,
+    exactamente en el mismo formato que los documentos sintéticos, para
+    que se indexen juntos en el mismo vector store.
+    """
+    documentos = []
+    carpeta = Path(CARPETA_PDFS_RRHH)
+    if not carpeta.is_absolute():
+        carpeta = Path(__file__).resolve().parent / carpeta
+
+    for entrada in PDFS_RRHH:
+        ruta = carpeta / entrada["archivo"]
+        if not ruta.exists():
+            print(f"  ⚠️  PDF no encontrado, se omite: {ruta}")
+            continue
+
+        paginas = PyPDFLoader(str(ruta)).load()
+        texto_completo = "\n\n".join(p.page_content for p in paginas)
+        documentos.append(Document(
+            page_content=texto_completo,
+            metadata={
+                "titulo": entrada["titulo"],
+                "empresa": "TechnoDistrib S.A.S.",
+                "archivo": entrada["archivo"],
+            },
+        ))
+        print(f"  📄 PDF cargado: {entrada['archivo']} → \"{entrada['titulo']}\" ({len(paginas)} páginas)")
+
+    return documentos
+
+
+# ═══════════════════════════════════════════════════════════
 #  RAG — Construcción del vector store (una sola vez, global)
+#  Combina los documentos sintéticos con los PDFs reales.
 # ═══════════════════════════════════════════════════════════
 def construir_vector_store():
     documentos = [
@@ -234,7 +282,7 @@ def construir_vector_store():
             metadata={"titulo": doc["titulo"], "empresa": "TechnoDistrib S.A.S."},
         )
         for doc in DOCUMENTOS_RRHH
-    ]
+    ] + cargar_pdfs_rrhh()
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=800,
@@ -315,9 +363,32 @@ def crear_agente_investigador(retriever):
         return {
             "contexto_reunido": contexto,
             "fuentes": fuentes,
-            "mensajes": [AIMessage(content=f"[Investigador]: consultó {fuentes}")],
         }
     return agente_investigador
+
+
+# ═══════════════════════════════════════════════════════════
+#  MEMORIA — formatea el historial de conversación previo
+#  para que el analista y el redactor puedan usarlo como
+#  contexto (ej. preguntas de seguimiento).
+#  ✏️ MODIFICA AQUÍ: cuántos mensajes previos recordar
+# ═══════════════════════════════════════════════════════════
+MEMORIA_MAX_MENSAJES = 8  # ~4 intercambios pregunta/respuesta
+
+
+def formatear_historial(mensajes: list) -> str:
+    """Convierte los mensajes previos (sin incluir la pregunta actual) a texto plano."""
+    previos = mensajes[:-1][-MEMORIA_MAX_MENSAJES:]  # excluye la pregunta actual
+    if not previos:
+        return "(sin conversación previa)"
+
+    lineas = []
+    for m in previos:
+        if isinstance(m, HumanMessage):
+            lineas.append(f"Usuario: {m.content}")
+        elif isinstance(m, AIMessage):
+            lineas.append(f"Asistente: {m.content}")
+    return "\n".join(lineas) if lineas else "(sin conversación previa)"
 
 
 # ═══════════════════════════════════════════════════════════
@@ -342,6 +413,10 @@ Responde en español con estructura clara."""
         SystemMessage(content=system),
         HumanMessage(content=f"""Pregunta del usuario: {estado['tarea_original']}
 
+Conversación previa (úsala solo si la pregunta actual hace referencia a ella,
+por ejemplo "y en esa área..." o "cuál fue mi pregunta anterior"):
+{formatear_historial(estado.get('mensajes', []))}
+
 Documentos internos recuperados:
 {estado['contexto_reunido']}
 
@@ -352,7 +427,6 @@ la pregunta."""),
     print(f"  📊 [ANALISTA] Análisis completado ({len(respuesta.content)} chars)")
     return {
         "analisis": respuesta.content,
-        "mensajes": [AIMessage(content=f"[Analista]: {respuesta.content[:200]}...")],
     }
 
 
@@ -377,6 +451,9 @@ Responde en español."""
         SystemMessage(content=system),
         HumanMessage(content=f"""Pregunta del usuario: {estado['tarea_original']}
 
+Conversación previa (úsala solo si la pregunta actual hace referencia a ella):
+{formatear_historial(estado.get('mensajes', []))}
+
 Análisis del equipo de RRHH:
 {estado['analisis']}
 
@@ -388,7 +465,6 @@ Redacta la respuesta final para el usuario, citando las fuentes al final."""),
     print(f"  ✍️  [REDACTOR] Respuesta final lista")
     return {
         "respuesta_final": respuesta.content,
-        "mensajes": [AIMessage(content=respuesta.content)],
     }
 
 
@@ -448,6 +524,8 @@ def main():
     print("  Documentos cargados:")
     for doc in DOCUMENTOS_RRHH:
         print(f"    📄 {doc['titulo']}")
+    for pdf in PDFS_RRHH:
+        print(f"    📄 {pdf['titulo']} (PDF)")
 
     print("\n  Preguntas de ejemplo:")
     print("    • '¿Cuál fue el resultado de la encuesta de clima laboral?'")
@@ -456,6 +534,8 @@ def main():
     print("    • '¿Qué beneficios ofrece la empresa para retener talento?'")
     print("    • '¿Cuánto cuesta la rotación de personal por empleado?'")
     print("  Para salir: salir\n")
+
+    historial_mensajes = []  # ✏️ persiste entre preguntas mientras dure esta sesión de consola
 
     while True:
         try:
@@ -468,7 +548,7 @@ def main():
         print(f"\n  Procesando con 4 agentes...\n")
 
         estado_inicial = {
-            "mensajes":         [],
+            "mensajes":         historial_mensajes + [HumanMessage(content=tarea)],
             "tarea_original":   tarea,
             "siguiente_agente": "",
             "contexto_reunido": "",
@@ -484,6 +564,10 @@ def main():
             print("─" * 60)
             print(resultado["respuesta_final"])
             print("─" * 60 + "\n")
+
+            # Guarda el intercambio para que las próximas preguntas lo recuerden
+            historial_mensajes = resultado["mensajes"] + [AIMessage(content=resultado["respuesta_final"])]
+            historial_mensajes = historial_mensajes[-MEMORIA_MAX_MENSAJES:]
         except Exception as e:
             print(f"\n  ❌ Error: {e}\n")
 
